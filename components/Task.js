@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome"; 
+
 
 const Task = (props) => {
 
@@ -19,13 +21,13 @@ const Task = (props) => {
                 <TouchableOpacity style={styles.square} onPress={handleToggleComplete}>
                     {isCompleted && <Text style={styles.checkmark}>✔️</Text>}
                 </TouchableOpacity>
-                 <Text style={[styles.text, isCompleted && styles.completedText]}>
+                <Text style={[styles.text, isCompleted && styles.completedText]}>
                      {props.text}
-                 </Text>
+                </Text>
             </View>
 
             <TouchableOpacity onPress={handleDeletetask}>
-              <View style={styles.circular}></View>
+              <Icon name="trash" size={20} color="#FF6347" /> 
             </TouchableOpacity>
         </View>
     )
@@ -34,7 +36,7 @@ const Task = (props) => {
 const styles = StyleSheet.create({
     item: {
         backgroundColor: "#FFF",
-        padding: 15,
+        padding: 20,
         borderRadius: 10,
         flexDirection: "row",
         alignItems:"center",
@@ -62,13 +64,6 @@ const styles = StyleSheet.create({
     completedText: {
         textDecorationLine: "line-through", 
         color: "#A9A9A9",
-    },
-    circular: {
-        width: 12,
-        height:12,
-        borderColor: "#55BCF6",
-        borderWidth: 2,
-        borderRadius: 5,
     },
     checkmark: {
         color: "#FFF",
