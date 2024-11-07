@@ -1,14 +1,32 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, {useState} from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 const Task = (props) => {
+
+    const [isCompleted, setIsCompleted] = useState(false);
+
+    const handleToggleComplete = () => {
+        setIsCompleted(!isCompleted);
+    };
+
+    const handleDeletetask = () => {
+        props.completeTask(props.index); // Call completeTask passed as a prop
+    };
+
     return (
         <View style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}></View>
-                 <Text style={styles.text}>{props.text}</Text>
+                <TouchableOpacity style={styles.square} onPress={handleToggleComplete}>
+                    {isCompleted && <Text style={styles.checkmark}>✔️</Text>}
+                </TouchableOpacity>
+                 <Text style={[styles.text, isCompleted && styles.completedText]}>
+                     {props.text}
+                 </Text>
             </View>
-            <View style={styles.circular}></View>
+
+            <TouchableOpacity onPress={handleDeletetask}>
+              <View style={styles.circular}></View>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -35,9 +53,15 @@ const styles = StyleSheet.create({
         opacity: 0.4,   
         borderRadius: 5,
         marginRight: 15,
+        justifyContent: "center",
+        alignItems: "center"
     },
     text: {
         maxWidth: "80%",
+    },
+    completedText: {
+        textDecorationLine: "line-through", 
+        color: "#A9A9A9",
     },
     circular: {
         width: 12,
@@ -45,6 +69,10 @@ const styles = StyleSheet.create({
         borderColor: "#55BCF6",
         borderWidth: 2,
         borderRadius: 5,
+    },
+    checkmark: {
+        color: "#FFF",
+        fontSize: 15,
     },
 });
 
