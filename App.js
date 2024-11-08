@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Platform, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, ImageBackground, Keyboard } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, ImageBackground, Keyboard, FlatList } from 'react-native';
 import Task from "./components/Task";
 
 export default function App() {
@@ -17,12 +17,20 @@ export default function App() {
     setTaskItems([...taskItems, task]);
     setTask("");
     Keyboard.dismiss(); // This keyboard seems to be a little buggy
-    }
+    };
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy);
-  }
+  };
+
+  const renderTaskItem = ({item, index}) => (
+    <Task
+      text={item}
+      index={index}
+      completeTask={completeTask}
+    />
+  );
 
   return (
     <ImageBackground
@@ -34,23 +42,20 @@ export default function App() {
 
         <View style={styles.taskWrapper}>
           <Text style={styles.sectionTitle}>Today's Task</Text>
-          <Text style={styles.dateTitle}>{date}</Text>
+          <Text style={styles.dateTitle}>{date}
+        </Text>
 
-        <View style={styles.items}>
-            {
-              taskItems.map((item, index) => {
-              return (
-                <View key={index}>
-                  <Task 
-                  text={item} 
-                  index={index}
-                  completeTask={completeTask} // Pass completeTask function as a prop
-                  />
-                </View>
-              )
-              })
-            }
+        <View style={styles.listBackground}>
+          <FlatList
+          data={taskItems}
+          renderItem={renderTaskItem}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.items}
+          style={{ }}
+          />
         </View>
+
+        
         </View>
 
         <KeyboardAvoidingView
@@ -87,9 +92,16 @@ const styles = StyleSheet.create({
     fontWeight: "light",
     paddingTop: 2,
     paddingLeft:2,
+    paddingBottom: 30,
   },
   items: {
-    marginTop: 30,
+    shadowColor:"black",
+    shadowRadius:10,
+  },
+  listBackground: {
+    height: '75%', 
+    backgroundColor:"rgba(255, 255, 255, 0.1)",
+    borderRadius: 10,
   },
   writeTaskWrapper: {
     position: "absolute",
@@ -97,7 +109,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
   },
 input: {
   paddingVertical: 15,
